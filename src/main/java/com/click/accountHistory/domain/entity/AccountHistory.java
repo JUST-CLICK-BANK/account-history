@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -53,7 +54,7 @@ public class AccountHistory {
     @Column(name = "BH_RECEIVE")
     private String bhReceive;
 
-    @Column(name = "BH_MEMO")
+    @Column(name = "BH_MEMO") @Setter
     private String bhMemo;
 
     @ManyToOne
