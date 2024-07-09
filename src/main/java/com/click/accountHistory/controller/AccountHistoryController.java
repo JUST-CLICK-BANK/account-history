@@ -40,11 +40,13 @@ public class AccountHistoryController {
     @PostMapping("/deposit")
     public void deposit(UUID userId, DepositRequest depositRequest){
         accountHistoryService.addDeposit(userId, depositRequest);
+        //TODO 이미 계좌 쪽을 들렸다가 오는데 굳이 userID가 필요한가?
     }
 
     @PostMapping("/withdraw")
     public void deposit(UUID userId, WithdrawRequest withdrawRequest){
         accountHistoryService.addWithdraw(userId, withdrawRequest);
+        //TODO 이것도 마찬가지로 userID가 필요한가?
     }
 
 
