@@ -6,6 +6,7 @@ import com.click.accountHistory.domain.dto.response.AccountHistoryDetailResponse
 import com.click.accountHistory.domain.dto.response.AccountHistoryResponse;
 import com.click.accountHistory.domain.entity.AccountHistory;
 import com.click.accountHistory.domain.repository.AccountHistoryRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,6 +33,16 @@ public class AccountHistoryServiceImpl implements AccountHistoryService {
         Optional<AccountHistory> byId = accountHistoryRepository.findById(historyId);
         AccountHistory accountHistory = byId.orElseThrow(() -> new IllegalArgumentException("거래 기록이 없습니다."));
         return AccountHistoryDetailResponse.from(accountHistory);
+    }
+
+    @Transactional
+    @Override
+    public void updateHistoryMemo(Long historyId, String memo) {
+        Optional<AccountHistory> byId = accountHistoryRepository.findById(historyId);
+        AccountHistory accountHistory = byId.orElseThrow(
+            () -> new IllegalArgumentException("거래 기록이 없습니다."));
+
+        accountHistory.setBhMemo(memo);
     }
 
     @Override
