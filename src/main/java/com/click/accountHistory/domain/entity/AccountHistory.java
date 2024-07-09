@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "ACCOUNT_HISTORIES")
 public class AccountHistory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "HISTORY_ID")
@@ -29,6 +28,9 @@ public class AccountHistory {
 
     @Column(name = "BH_AT")
     private LocalDateTime bhAt;
+
+    @Column(name = "BH_NAME")
+    private String bhName;
 
     @Column(name = "BH_AMOUNT")
     private Long bhAmount;
@@ -48,8 +50,8 @@ public class AccountHistory {
     @Column(name = "CARD_ID")
     private Long cardId;
 
-    @Column(name = "BH_NAME")
-    private String bhName;
+    @Column(name = "BH_RECEIVE")
+    private String bhReceive;
 
     @Column(name = "BH_MEMO")
     private String bhMemo;
