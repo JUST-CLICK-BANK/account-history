@@ -45,6 +45,9 @@ public class AccountHistory {
     @Column(name = "BH_STATUS")
     private String bhStatus;
 
+    @Column(name = "BH_BALANCE")
+    private Long bhBalance;
+
     @Column(name = "BH_OUT_TYPE")
     private Integer bhOutType; //TODO : Enum 으로 수정
 

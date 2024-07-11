@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: accountHistory
+  datasource:
+    url: jdbc:mysql://localhost:3306/account_history?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+server:
+  port: 8080
