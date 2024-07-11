@@ -10,6 +10,7 @@ public record AccountHistoryResponse(
     String bhName,
     Long bhAmount,
     String bhStatus,
+    Long bhBalance,
     Category categoryId
 ) {
     public static AccountHistoryResponse from(AccountHistory history) {
@@ -19,6 +20,7 @@ public record AccountHistoryResponse(
             history.getBhName(),
             history.getBhAmount(),
             history.getBhStatus(),
+            history.getBhBalance(),
             history.getCategoryId()
         );
     }
