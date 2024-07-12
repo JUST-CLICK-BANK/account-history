@@ -6,10 +6,11 @@ import com.click.accountHistory.domain.dto.response.AccountHistoryDetailResponse
 import com.click.accountHistory.domain.dto.response.AccountHistoryResponse;
 import com.click.accountHistory.domain.entity.AccountHistory;
 import com.click.accountHistory.domain.repository.AccountHistoryRepository;
+import com.click.accountHistory.exception.AccountHistoryErrorCode;
+import com.click.accountHistory.exception.AccountHistoryException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,8 @@ public class AccountHistoryServiceImpl implements AccountHistoryService {
     @Override
     public AccountHistoryDetailResponse getHistoryDetail(Long historyId) {
         Optional<AccountHistory> byId = accountHistoryRepository.findById(historyId);
-        AccountHistory accountHistory = byId.orElseThrow(() -> new IllegalArgumentException("거래 기록이 없습니다."));
+        AccountHistory accountHistory = byId.orElseThrow(() -> new AccountHistoryException(
+            AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
         return AccountHistoryDetailResponse.from(accountHistory);
     }
 
@@ -39,8 +41,8 @@ public class AccountHistoryServiceImpl implements AccountHistoryService {
     @Override
     public void updateHistoryMemo(Long historyId, String memo) {
         Optional<AccountHistory> byId = accountHistoryRepository.findById(historyId);
-        AccountHistory accountHistory = byId.orElseThrow(
-            () -> new IllegalArgumentException("거래 기록이 없습니다."));
+        AccountHistory accountHistory = byId.orElseThrow(() -> new AccountHistoryException(
+            AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
 
         accountHistory.setBhMemo(memo);
     }
