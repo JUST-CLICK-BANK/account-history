@@ -14,9 +14,9 @@ public interface AccountHistoryService {
 
     AccountHistoryDetailResponse getHistoryDetail(Long historyId);
 
-    void addDeposit(UUID userId, DepositRequest depositRequest);
+    void addDeposit(DepositRequest depositRequest);
 
-    void addWithdraw(UUID userId, WithdrawRequest withdrawRequest);
+    void addWithdraw(WithdrawRequest withdrawRequest);
 
     void updateHistoryMemo(Long historyId, String memo);
 }

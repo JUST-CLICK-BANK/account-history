@@ -11,6 +11,7 @@ public record WithdrawRequest(
     String myAccount,
     String yourAccount, // 입금에서 내 통장에 표시되는 내용은 받는 분 표시라서 이게 필요한지 모르겠음
     String bhStatus,
+    Long bhBalance,
     Integer bhOutType,
     Long cardId,
     String bhReceive,
@@ -25,6 +26,7 @@ public record WithdrawRequest(
             .myAccount(myAccount)
             .yourAccount(yourAccount)
             .bhStatus(bhStatus)
+            .bhBalance(bhBalance)
             .bhOutType(bhOutType)
             .cardId(cardId)
             .bhReceive(bhReceive)

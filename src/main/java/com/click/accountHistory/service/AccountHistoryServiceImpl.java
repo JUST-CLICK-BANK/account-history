@@ -46,12 +46,12 @@ public class AccountHistoryServiceImpl implements AccountHistoryService {
     }
 
     @Override
-    public void addDeposit(UUID userId, DepositRequest depositRequest) {
+    public void addDeposit(DepositRequest depositRequest) {
         accountHistoryRepository.save(depositRequest.toEntity());
     }
 
     @Override
-    public void addWithdraw(UUID userId, WithdrawRequest withdrawRequest) {
+    public void addWithdraw(WithdrawRequest withdrawRequest) {
         accountHistoryRepository.save(withdrawRequest.toEntity());
     }
 }
