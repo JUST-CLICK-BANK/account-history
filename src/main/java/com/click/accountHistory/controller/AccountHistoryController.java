@@ -35,7 +35,7 @@ public class AccountHistoryController {
     }
 
     @PutMapping("/detail/{historyId}")
-    public void updateAccountHistoryMemo(@PathVariable Long historyId, @RequestBody String memo) {
+    public void updateAccountHistoryMemo(@PathVariable Long historyId, @RequestBody(required = false) String memo) {
         accountHistoryService.updateHistoryMemo(historyId, memo);
     }
 

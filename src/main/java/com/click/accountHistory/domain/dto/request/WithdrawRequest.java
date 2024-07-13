@@ -2,6 +2,7 @@ package com.click.accountHistory.domain.dto.request;
 
 import com.click.accountHistory.domain.entity.AccountHistory;
 import com.click.accountHistory.domain.entity.Category;
+import com.click.accountHistory.domain.type.TransactionType;
 import java.time.LocalDateTime;
 
 public record WithdrawRequest(
@@ -27,7 +28,7 @@ public record WithdrawRequest(
             .yourAccount(yourAccount)
             .bhStatus(bhStatus)
             .bhBalance(bhBalance)
-            .bhOutType(bhOutType)
+            .bhOutType(TransactionType.fromValue(bhOutType))
             .cardId(cardId)
             .bhReceive(bhReceive)
             .bhMemo(null)

@@ -2,6 +2,7 @@ package com.click.accountHistory.domain.dto.request;
 
 import com.click.accountHistory.domain.entity.AccountHistory;
 import com.click.accountHistory.domain.entity.Category;
+import com.click.accountHistory.domain.type.TransactionType;
 import java.time.LocalDateTime;
 
 public record DepositRequest(
@@ -23,7 +24,7 @@ public record DepositRequest(
             .yourAccount(yourAccount)
             .bhStatus(bhStatus)
             .bhBalance(bhBalance)
-            .bhOutType(null)
+            .bhOutType(TransactionType.DEPOSIT)
             .cardId(null)
             .bhReceive(bhReceive)
             .bhMemo(null)
