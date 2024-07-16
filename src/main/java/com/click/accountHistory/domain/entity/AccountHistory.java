@@ -1,7 +1,10 @@
 package com.click.accountHistory.domain.entity;
 
+import com.click.accountHistory.domain.type.TransactionType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,8 +48,12 @@ public class AccountHistory {
     @Column(name = "BH_STATUS")
     private String bhStatus;
 
+    @Column(name = "BH_BALANCE")
+    private Long bhBalance;
+
     @Column(name = "BH_OUT_TYPE")
-    private Integer bhOutType; //TODO : Enum 으로 수정
+    @Enumerated(EnumType.STRING)
+    private TransactionType bhOutType; //TODO : Enum 으로 수정
 
     @Column(name = "CARD_ID")
     private Long cardId;

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,7 +25,7 @@ public class AccountHistoryController {
     public final AccountHistoryService accountHistoryService;
 
     @GetMapping
-    public List<AccountHistoryResponse> getAccountHistory(String account) {
+    public List<AccountHistoryResponse> getAccountHistory(@RequestParam String account) {
         return accountHistoryService.getAllHistory(account);
     }
 
@@ -33,20 +35,18 @@ public class AccountHistoryController {
     }
 
     @PutMapping("/detail/{historyId}")
-    public void updateAccountHistoryMemo(@PathVariable Long historyId, String memo) {
+    public void updateAccountHistoryMemo(@PathVariable Long historyId, @RequestBody(required = false) String memo) {
         accountHistoryService.updateHistoryMemo(historyId, memo);
     }
 
     @PostMapping("/deposit")
-    public void deposit(UUID userId, DepositRequest depositRequest){
-        accountHistoryService.addDeposit(userId, depositRequest);
-        //TODO 이미 계좌 쪽을 들렸다가 오는데 굳이 userID가 필요한가?
+    public void deposit(@RequestBody DepositRequest depositRequest){
+        accountHistoryService.addDeposit(depositRequest);
     }
 
     @PostMapping("/withdraw")
-    public void deposit(UUID userId, WithdrawRequest withdrawRequest){
-        accountHistoryService.addWithdraw(userId, withdrawRequest);
-        //TODO 이것도 마찬가지로 userID가 필요한가?
+    public void deposit(@RequestBody WithdrawRequest withdrawRequest){
+        accountHistoryService.addWithdraw(withdrawRequest);
     }
 
 
