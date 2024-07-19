@@ -13,9 +13,10 @@ public record DepositRequest(
     String bhStatus,
     Long bhBalance,
     String bhReceive,
-    Category categoryId
+    Long categoryId
 ) {
-    public AccountHistory toEntity() {
+
+    public AccountHistory toEntity(Category category) {
         return AccountHistory.builder()
             .bhAt(LocalDateTime.now())
             .bhName(bhName)
@@ -28,7 +29,7 @@ public record DepositRequest(
             .cardId(null)
             .bhReceive(bhReceive)
             .bhMemo(null)
-            .categoryId(categoryId)
+            .categoryId(category)
             .build();
     }
 }

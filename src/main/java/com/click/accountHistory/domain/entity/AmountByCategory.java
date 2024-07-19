@@ -5,28 +5,32 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "CATEGORIES")
-public class Category {
+@Table(name = "AMOUNT_BY_CATEGORY")
+public class AmountByCategory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CATEGORY_ID")
-    private Long categoryId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ABC_ID")
+    private Long abcId;
 
-    @Column(name = "CATEGORY_NAME")
-    private String categoryName;
+    @Column(name = "ABC_ACCOUNT")
+    private String abcAccount;
+
+    @Column(name = "ABC_CATEGORY")
+    private String abcCategory;
+
+    @Column(name = "ABC_AMOUNT") @Setter
+    private Long abcAmount;
 
 }

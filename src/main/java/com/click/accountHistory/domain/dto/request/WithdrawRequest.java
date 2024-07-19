@@ -6,7 +6,6 @@ import com.click.accountHistory.domain.type.TransactionType;
 import java.time.LocalDateTime;
 
 public record WithdrawRequest(
-    Long historyId,
     String bhName,
     Long bhAmount,
     String myAccount,
@@ -16,11 +15,11 @@ public record WithdrawRequest(
     Integer bhOutType,
     Long cardId,
     String bhReceive,
-    Category categoryId
+    Long categoryId
 ) {
-    public AccountHistory toEntity() {
+
+    public AccountHistory toEntity(Category category) {
         return AccountHistory.builder()
-            .historyId(historyId)
             .bhAt(LocalDateTime.now())
             .bhName(bhName)
             .bhAmount(bhAmount)
@@ -32,7 +31,7 @@ public record WithdrawRequest(
             .cardId(cardId)
             .bhReceive(bhReceive)
             .bhMemo(null)
-            .categoryId(categoryId)
+            .categoryId(category)
             .build();
     }
 }
