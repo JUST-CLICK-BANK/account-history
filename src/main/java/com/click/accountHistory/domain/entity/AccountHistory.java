@@ -25,6 +25,7 @@ import lombok.Setter;
 @Builder
 @Table(name = "ACCOUNT_HISTORIES")
 public class AccountHistory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "HISTORY_ID")
@@ -53,7 +54,7 @@ public class AccountHistory {
 
     @Column(name = "BH_OUT_TYPE")
     @Enumerated(EnumType.STRING)
-    private TransactionType bhOutType; //TODO : Enum 으로 수정
+    private TransactionType bhOutType;
 
     @Column(name = "CARD_ID")
     private Long cardId;
@@ -61,7 +62,8 @@ public class AccountHistory {
     @Column(name = "BH_RECEIVE")
     private String bhReceive;
 
-    @Column(name = "BH_MEMO") @Setter
+    @Column(name = "BH_MEMO")
+    @Setter
     private String bhMemo;
 
     @ManyToOne

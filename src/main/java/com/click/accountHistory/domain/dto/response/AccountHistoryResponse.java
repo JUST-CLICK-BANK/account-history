@@ -13,15 +13,10 @@ public record AccountHistoryResponse(
     Long bhBalance,
     Category categoryId
 ) {
+
     public static AccountHistoryResponse from(AccountHistory history) {
-        return new AccountHistoryResponse(
-            history.getHistoryId(),
-            history.getBhAt(),
-            history.getBhName(),
-            history.getBhAmount(),
-            history.getBhStatus(),
-            history.getBhBalance(),
-            history.getCategoryId()
-        );
+        return new AccountHistoryResponse(history.getHistoryId(), history.getBhAt(),
+            history.getBhName(), history.getBhAmount(), history.getBhStatus(),
+            history.getBhBalance(), history.getCategoryId());
     }
 }
