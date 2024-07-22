@@ -10,6 +10,7 @@ public record AccountHistoryDetailResponse(
     String bhReceive,
     String bhMemo
 ) {
+
     public static AccountHistoryDetailResponse from(AccountHistory accountHistory) {
         return new AccountHistoryDetailResponse(
             accountHistory.getHistoryId(),

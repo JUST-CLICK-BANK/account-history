@@ -35,20 +35,20 @@ public class AccountHistoryController {
     }
 
     @PutMapping("/detail/{historyId}")
-    public void updateAccountHistoryMemo(@PathVariable Long historyId, @RequestBody(required = false) String memo) {
+    public void updateAccountHistoryMemo(@PathVariable Long historyId,
+        @RequestBody(required = false) String memo) {
         accountHistoryService.updateHistoryMemo(historyId, memo);
     }
 
     @PostMapping("/deposit")
-    public void deposit(@RequestBody DepositRequest depositRequest){
+    public void deposit(@RequestBody DepositRequest depositRequest) {
         accountHistoryService.addDeposit(depositRequest);
     }
 
     @PostMapping("/withdraw")
-    public void deposit(@RequestBody WithdrawRequest withdrawRequest){
+    public void deposit(@RequestBody WithdrawRequest withdrawRequest) {
         accountHistoryService.addWithdraw(withdrawRequest);
     }
-
 
 
 }
