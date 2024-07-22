@@ -2,150 +2,215 @@ package com.click.accountHistory.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.click.accountHistory.TestInitData;
 import com.click.accountHistory.domain.dto.request.DepositRequest;
 import com.click.accountHistory.domain.dto.request.WithdrawRequest;
 import com.click.accountHistory.domain.dto.response.AccountHistoryDetailResponse;
 import com.click.accountHistory.domain.dto.response.AccountHistoryResponse;
-import com.click.accountHistory.domain.entity.AccountHistory;
+import com.click.accountHistory.domain.entity.Category;
 import com.click.accountHistory.domain.repository.AccountHistoryRepository;
-import com.click.accountHistory.domain.type.TransactionType;
-import com.click.accountHistory.exception.AccountHistoryErrorCode;
+import com.click.accountHistory.domain.repository.AmountByCategoryRepository;
+import com.click.accountHistory.domain.repository.CategoryRepository;
 import com.click.accountHistory.exception.AccountHistoryException;
-import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
-class AccountHistoryServiceImplTest {
+import static org.mockito.ArgumentMatchers.any;
 
-    @Autowired
-    private AccountHistoryService accountHistoryService;
+@ExtendWith(MockitoExtension.class)
+class AccountHistoryServiceImplTest extends TestInitData {
 
-    @Autowired
+    @InjectMocks
+    private AccountHistoryServiceImpl accountHistoryService;
+
+    @Mock
     private AccountHistoryRepository accountHistoryRepository;
 
-    @BeforeEach
-    void setUp() {
-        accountHistoryRepository.deleteAll();
+    @Mock
+    private CategoryRepository categoryRepository;
+
+    @Mock
+    private AmountByCategoryRepository amountByCategoryRepository;
+
+    @Nested
+    @DisplayName("거래내역 전체 조회")
+    class getAllAccountHistory {
+        @Test
+        void 성공_전체_거래내역을_조회할_때() {
+            // given
+            String account = "111-111-111";
+            BDDMockito.given(accountHistoryRepository.findByMyAccount(account))
+                .willReturn(List.of(accountHistory));
+
+            // when
+            List<AccountHistoryResponse> responses = accountHistoryService.getAllHistory(account);
+
+            // then
+            Mockito.verify(accountHistoryRepository, Mockito.times(1))
+                .findByMyAccount(account);
+            assertEquals(responses.size(), 1);
+            assertEquals(responses.get(0).bhAmount(),accountHistory.getBhAmount());
+        }
+
+        @Test
+        void 성공_해당계좌에_데이터가_없을_때() {
+            // given
+            String account = "111-111-112";
+            BDDMockito.given(accountHistoryRepository.findByMyAccount(account))
+                .willReturn(Collections.emptyList());
+
+            // when
+            List<AccountHistoryResponse> responses = accountHistoryService.getAllHistory(account);
+
+            // then
+            Mockito.verify(accountHistoryRepository, Mockito.times(1))
+                .findByMyAccount(account);
+            assertEquals(responses.size(), 0);
+        }
     }
 
-    @Test
-    @DisplayName("거래 내역 전체 조회")
-    void getAllHistory() {
-        // given
-        AccountHistory accountHistory = new AccountHistory(
-            null, LocalDateTime.now(), "abc", 10000L, "111-111-111", "222-222-222",
-            "출금", 10000000L, TransactionType.TRANSFER, null, "카카오페이", null, null);
-        accountHistoryRepository.save(accountHistory);
+    @Nested
+    @DisplayName("거래내역 상세 조회")
+    class getAccountHistoryDetail {
+        @Test
+        void 성공_올바른_ID_값으로_조회할_때() {
+            // given
+            Long accountHistoryId = 1L;
+            BDDMockito.given(accountHistoryRepository.findById(accountHistoryId))
+                .willReturn(Optional.of(accountHistory));
 
-        AccountHistory accountHistory1 = new AccountHistory(
-            null, LocalDateTime.now(), "abc", 10000L, "111-111-111", "222-222-222",
-            "출금", 10000000L, TransactionType.TRANSFER, null, "카카오페이", null, null);
-        accountHistoryRepository.save(accountHistory1);
+            // when
+            AccountHistoryDetailResponse response = accountHistoryService.getHistoryDetail(accountHistoryId);
 
-        // when
-        List<AccountHistoryResponse> allHistory = accountHistoryService.getAllHistory(
-            "111-111-111");
-        List<AccountHistoryResponse> allHistory1 = accountHistoryService.getAllHistory(
-            "222-222-222");
+            // then
+            Mockito.verify(accountHistoryRepository, Mockito.times(1))
+                .findById(accountHistoryId);
+            assertEquals(response.historyId(), 1);
+            assertEquals(response.bhMemo(), accountHistory.getBhMemo());
+        }
 
-        // then
-        assertEquals(2, allHistory.size());
-        assertEquals(0, allHistory1.size());
+        @Test
+        void 실패_잘못된_ID_값으로_조회할_떄() {
+            // given
+            Long accountHistoryId = 2L;
+            BDDMockito.given(accountHistoryRepository.findById(accountHistoryId))
+                    .willReturn(Optional.empty());
+
+            // when & then
+            assertThrows(AccountHistoryException.class,
+                () -> accountHistoryService.getHistoryDetail(accountHistoryId));
+        }
     }
 
-    @Test
-    @DisplayName("거래 내역 상세 조회")
-    void getHistoryDetail() {
-        // given
-        AccountHistory accountHistory = new AccountHistory(
-            null, LocalDateTime.now(), "abc", 10000L, "111-111-111", "333-333-333",
-            "출금", 10000000L, TransactionType.TRANSFER, null, "카카오페이", null, null);
-        accountHistory = accountHistoryRepository.save(accountHistory);
+    @Nested
+    @DisplayName("거래내역 메모 수정")
+    class updateHistoryMemo {
+        @Test
+        void 성공_메모를_업데이트_할_때() {
+            // given
+            Long accountHistoryId = 1L;
+            String memo = "memo";
+            BDDMockito.given(accountHistoryRepository.findById(accountHistoryId))
+                .willReturn(Optional.of(accountHistory));
 
-        // when
-        AccountHistoryDetailResponse historyDetail = accountHistoryService.getHistoryDetail(accountHistory.getHistoryId());
+            // when
+            accountHistoryService.updateHistoryMemo(accountHistoryId, memo);
 
-        // then
-        assertEquals("카카오페이", historyDetail.bhReceive());
-        assertNotEquals("박미람", historyDetail.bhReceive());
+            // then
+            Mockito.verify(accountHistoryRepository, Mockito.times(1))
+                .findById(accountHistoryId);
+            assertEquals(memo, accountHistory.getBhMemo());
+        }
+
+        @Test
+        void 실패_잘못된_ID_값으로_조회할_떄() {
+            // given
+            Long accountHistoryId = 2L;
+            BDDMockito.given(accountHistoryRepository.findById(accountHistoryId))
+                .willReturn(Optional.empty());
+
+            // when & then
+            assertThrows(AccountHistoryException.class,
+                () -> accountHistoryService.getHistoryDetail(accountHistoryId));
+        }
     }
 
-    @Test
-    @DisplayName("거래 내역 상세 조회 - 없는 내역 조회 시 예외 발생")
-    void getHistoryDetail_NotFound() {
-        // given
-        Long nonExistentId = 999L;
+    @Nested
+    @DisplayName("입금 기록")
+    class addDepositTest {
+        @Test
+        void 성공_입금내역_저장() {
+            // given
+            DepositRequest request = new DepositRequest(
+                "거래1",
+                1000000L,
+                "111-111-111",
+                "333-333-333",
+                "입금",
+                1000000L,
+                "급여",
+                9
+            );
+            Category category = new Category(9, "급여");
+            BDDMockito.given(categoryRepository.findById(request.categoryId()))
+                .willReturn(Optional.of(category));
+            BDDMockito.given(accountHistoryRepository.save(any()))
+                    .willReturn(null);
 
-        // when / then
-        AccountHistoryException exception = assertThrows(AccountHistoryException.class, () ->
-            accountHistoryService.getHistoryDetail(nonExistentId)
-        );
+            // when
+            accountHistoryService.addDeposit(request);
 
-        assertEquals(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY, exception.getErrorCode());
+            // then
+            Mockito.verify(accountHistoryRepository, Mockito.times(1))
+                .save(any());
+        }
     }
 
-    @Test
-    @DisplayName("거래 내역 메모 수정")
-    void updateHistoryMemo() {
-        // given
-        AccountHistory accountHistory = new AccountHistory(
-            null, LocalDateTime.now(), "abc", 10000L, "111-111-111", "333-333-333",
-            "출금", 10000000L, TransactionType.TRANSFER, null, "박미람", null, null);
-        accountHistory = accountHistoryRepository.save(accountHistory);
+    @Nested
+    @DisplayName("출금 기록")
+    class addWithdrawTest {
+        @Test
+        void 성공_출금내역_저장() {
+            // given
+            WithdrawRequest request = new WithdrawRequest(
+                "거래1",
+                10000L,
+                "111-111-111",
+                "333-333-333",
+                "출금",
+                1000000L,
+                1,
+                null,
+                "카카오페이",
+                1
+            );
+            Category category = new Category(1, "이체");
+            BDDMockito.given(categoryRepository.findById(request.categoryId()))
+                .willReturn(Optional.of(category));
+            BDDMockito.given(accountHistoryRepository.save(any()))
+                .willReturn(null);
+            BDDMockito.given(amountByCategoryRepository.findByAbcAccountAndAbcCategory(
+                    request.myAccount(), category.getCategoryName()))
+                .willReturn(null);
 
-        // when
-        accountHistoryService.updateHistoryMemo(accountHistory.getHistoryId(), "밥 값");
+            accountHistoryService.addWithdraw(request);
 
-        // then
-        Optional<AccountHistory> byId = accountHistoryRepository.findById(accountHistory.getHistoryId());
-        AccountHistory accountHistory1 = byId.orElseThrow(
-            () -> new IllegalArgumentException("해당 거래 내역이 존재하지 않습니다."));
+            Mockito.verify(accountHistoryRepository, Mockito.times(1))
+                .save(any());
+            Mockito.verify(amountByCategoryRepository, Mockito.times(1))
+                .findByAbcAccountAndAbcCategory(request.myAccount(), category.getCategoryName());
+        }
 
-        assertEquals("밥 값", accountHistory1.getBhMemo());
-    }
 
-    @Test
-    @DisplayName("입금 내역 기록")
-    void addDeposit() {
-        // given
-        DepositRequest request = new DepositRequest("월급", 1000000L,
-            "111-111-111", "222-222-222", "입금", 100000000L, null, null);
-
-        // when
-        accountHistoryService.addDeposit(request);
-
-        // then
-        List<AccountHistory> allHistories = accountHistoryRepository.findAll();
-        assertEquals(1, allHistories.size());
-
-        AccountHistory accountHistory1 = allHistories.get(0);
-        assertEquals("111-111-111", accountHistory1.getMyAccount());
-        assertEquals("월급", accountHistory1.getBhName());
-        assertNotEquals("222-222-222", accountHistory1.getMyAccount());
-    }
-
-    @Test
-    @DisplayName("출금 내역 기록")
-    void addWithdraw() {
-        // given
-        WithdrawRequest request = new WithdrawRequest(null, "카드값", 1000000L,
-            "111-111-111", "222-222-222", "출금", 100000000L, 2, null, null, null);
-
-        // when
-        accountHistoryService.addWithdraw(request);
-
-        // then
-        List<AccountHistory> allHistories = accountHistoryRepository.findAll();
-        assertEquals(1, allHistories.size());
-
-        AccountHistory accountHistory1 = allHistories.get(0);
-        assertEquals("111-111-111", accountHistory1.getMyAccount());
-        assertEquals("카드값", accountHistory1.getBhName());
     }
 }

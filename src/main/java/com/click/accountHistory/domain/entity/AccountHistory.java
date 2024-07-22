@@ -68,5 +68,6 @@ public class AccountHistory {
 
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID")
+    @Setter
     private Category categoryId;
 }
