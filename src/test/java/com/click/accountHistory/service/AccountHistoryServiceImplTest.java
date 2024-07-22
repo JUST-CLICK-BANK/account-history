@@ -159,9 +159,9 @@ class AccountHistoryServiceImplTest extends TestInitData {
                 "입금",
                 1000000L,
                 "급여",
-                9L
+                9
             );
-            Category category = new Category(9L, "급여");
+            Category category = new Category(9, "급여");
             BDDMockito.given(categoryRepository.findById(request.categoryId()))
                 .willReturn(Optional.of(category));
             BDDMockito.given(accountHistoryRepository.save(any()))
@@ -192,9 +192,9 @@ class AccountHistoryServiceImplTest extends TestInitData {
                 1,
                 null,
                 "카카오페이",
-                1L
+                1
             );
-            Category category = new Category(1L, "이체");
+            Category category = new Category(1, "이체");
             BDDMockito.given(categoryRepository.findById(request.categoryId()))
                 .willReturn(Optional.of(category));
             BDDMockito.given(accountHistoryRepository.save(any()))

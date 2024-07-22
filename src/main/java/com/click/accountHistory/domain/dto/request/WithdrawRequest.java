@@ -15,7 +15,7 @@ public record WithdrawRequest(
     Integer bhOutType,
     Long cardId,
     String bhReceive,
-    Long categoryId
+    Integer categoryId
 ) {
 
     public AccountHistory toEntity(Category category) {
