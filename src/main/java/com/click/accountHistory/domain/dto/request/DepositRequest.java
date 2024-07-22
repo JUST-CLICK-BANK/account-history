@@ -13,7 +13,7 @@ public record DepositRequest(
     String bhStatus,
     Long bhBalance,
     String bhReceive,
-    Long categoryId
+    Integer categoryId
 ) {
 
     public AccountHistory toEntity(Category category) {
