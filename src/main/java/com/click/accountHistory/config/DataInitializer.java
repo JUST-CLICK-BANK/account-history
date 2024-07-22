@@ -17,7 +17,7 @@ public class DataInitializer {
     public CommandLineRunner initializeData() {
         return args -> {
             if (categoryRepository.count() == 0) {
-                categoryRepository.save(new Category(0, "미정"));
+                categoryRepository.save(new Category(0, "기타"));
                 categoryRepository.save(new Category(1, "식비"));
                 categoryRepository.save(new Category(2, "생활"));
                 categoryRepository.save(new Category(3, "쇼핑"));
