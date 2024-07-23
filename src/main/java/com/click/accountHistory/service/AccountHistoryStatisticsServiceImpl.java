@@ -42,10 +42,16 @@ public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatis
     @Override
     public AccountMonthBudget getBudgetByAccount(String myAccount) {
         Long expenditure = amountByCategoryRepository.sumAmountsByAccount(myAccount);
+        assert expenditure!=null;
         Optional<AccountMonthBudget> byId = accountMonthBudgetRepository.findById(myAccount);
 
-        return byId.orElse(accountMonthBudgetRepository
-            .save(new AccountMonthBudget(myAccount, 0L, expenditure)));
+        if (byId.isEmpty()) {
+            AccountMonthBudget accountMonthBudget = new AccountMonthBudget(myAccount, 0L,
+                expenditure);
+            return accountMonthBudgetRepository.save(accountMonthBudget);
+        }
+
+        return byId.get();
     }
 
     @Transactional
