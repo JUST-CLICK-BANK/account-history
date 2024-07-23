@@ -44,7 +44,8 @@ public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatis
         Long expenditure = amountByCategoryRepository.sumAmountsByAccount(myAccount);
         Optional<AccountMonthBudget> byId = accountMonthBudgetRepository.findById(myAccount);
 
-        return byId.orElse(new AccountMonthBudget(myAccount, 0L, expenditure));
+        return byId.orElse(accountMonthBudgetRepository
+            .save(new AccountMonthBudget(myAccount, 0L, expenditure)));
     }
 
     @Transactional
