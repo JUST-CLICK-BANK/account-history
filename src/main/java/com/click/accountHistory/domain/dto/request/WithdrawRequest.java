@@ -14,7 +14,6 @@ public record WithdrawRequest(
     Long bhBalance,
     Integer bhOutType,
     Long cardId,
-    String bhReceive,
     Integer categoryId
 ) {
 
@@ -29,7 +28,6 @@ public record WithdrawRequest(
             .bhBalance(bhBalance)
             .bhOutType(TransactionType.fromValue(bhOutType))
             .cardId(cardId)
-            .bhReceive(bhReceive)
             .bhMemo(null)
             .categoryId(category)
             .build();

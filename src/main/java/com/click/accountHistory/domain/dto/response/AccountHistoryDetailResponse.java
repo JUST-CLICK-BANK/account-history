@@ -7,7 +7,6 @@ public record AccountHistoryDetailResponse(
     Long historyId,
     String bhOutType,
     Long cardId,
-    String bhReceive,
     String bhMemo
 ) {
 
@@ -16,7 +15,6 @@ public record AccountHistoryDetailResponse(
             accountHistory.getHistoryId(),
             accountHistory.getBhOutType().getName(),
             accountHistory.getCardId(),
-            accountHistory.getBhReceive(),
             accountHistory.getBhMemo()
         );
     }

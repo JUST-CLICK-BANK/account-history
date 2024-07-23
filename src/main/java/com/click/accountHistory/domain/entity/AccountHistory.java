@@ -59,9 +59,6 @@ public class AccountHistory {
     @Column(name = "CARD_ID")
     private Long cardId;
 
-    @Column(name = "BH_RECEIVE")
-    private String bhReceive;
-
     @Column(name = "BH_MEMO")
     @Setter
     private String bhMemo;
