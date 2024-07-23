@@ -32,5 +32,4 @@ public class AmountByCategory {
 
     @Column(name = "ABC_AMOUNT") @Setter
     private Long abcAmount;
-
 }

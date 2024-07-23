@@ -1,11 +1,17 @@
 package com.click.accountHistory.service;
 
+import com.click.accountHistory.domain.entity.AccountMonthBudget;
 import com.click.accountHistory.domain.entity.AmountByCategory;
 import com.click.accountHistory.domain.repository.AccountHistoryRepository;
+import com.click.accountHistory.domain.repository.AccountMonthBudgetRepository;
 import com.click.accountHistory.domain.repository.AmountByCategoryRepository;
+import com.click.accountHistory.exception.AccountHistoryErrorCode;
+import com.click.accountHistory.exception.AccountHistoryException;
+import jakarta.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatisticsService {
 
-    private final AccountHistoryRepository accountHistoryRepository;
+    private final AccountMonthBudgetRepository accountMonthBudgetRepository;
     private final AmountByCategoryRepository amountByCategoryRepository;
 
     @Override
@@ -31,5 +37,23 @@ public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatis
         }
 
         return sumAmountByCategory;
+    }
+
+    @Override
+    public AccountMonthBudget getBudgetByAccount(String myAccount) {
+        Long expenditure = amountByCategoryRepository.sumAmountsByAccount(myAccount);
+        Optional<AccountMonthBudget> byId = accountMonthBudgetRepository.findById(myAccount);
+
+        return byId.orElse(new AccountMonthBudget(myAccount, 0L, expenditure));
+    }
+
+    @Transactional
+    @Override
+    public void updateBudgetByAccount(String myAccount, Long budget) {
+        Optional<AccountMonthBudget> byId = accountMonthBudgetRepository.findById(myAccount);
+        AccountMonthBudget accountMonthBudget = byId.orElseThrow(
+            () -> new AccountHistoryException(AccountHistoryErrorCode.WRONG_ACCOUNT));
+
+        accountMonthBudget.setMbBudget(budget);
     }
 }
