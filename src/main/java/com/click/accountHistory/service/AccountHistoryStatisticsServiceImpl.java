@@ -39,6 +39,7 @@ public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatis
         return sumAmountByCategory;
     }
 
+    @Transactional
     @Override
     public AccountMonthBudget getBudgetByAccount(String myAccount) {
         Long expenditure = amountByCategoryRepository.sumAmountsByAccount(myAccount);
@@ -49,6 +50,8 @@ public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatis
             AccountMonthBudget accountMonthBudget = new AccountMonthBudget(myAccount, 0L,
                 expenditure);
             return accountMonthBudgetRepository.save(accountMonthBudget);
+        } else {
+            byId.get().setMbExpenditure(expenditure);
         }
 
         return byId.get();
