@@ -158,7 +158,6 @@ class AccountHistoryServiceImplTest extends TestInitData {
                 "333-333-333",
                 "입금",
                 1000000L,
-                "급여",
                 9
             );
             Category category = new Category(9, "급여");
@@ -191,7 +190,7 @@ class AccountHistoryServiceImplTest extends TestInitData {
                 1000000L,
                 1,
                 null,
-                "카카오페이",
+
                 1
             );
             Category category = new Category(1, "이체");

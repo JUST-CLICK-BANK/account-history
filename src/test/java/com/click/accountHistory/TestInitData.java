@@ -21,9 +21,9 @@ public class TestInitData {
             10000000L,
             TransactionType.TRANSFER,
             null,
-            "카카오페이",
             null,
-            null
+            new Category(10, "기타")
         );
+
     }
 }
