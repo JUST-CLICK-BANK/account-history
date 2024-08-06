@@ -2,7 +2,6 @@ package com.click.accountHistory.service;
 
 import com.click.accountHistory.domain.entity.AccountMonthBudget;
 import com.click.accountHistory.domain.entity.AmountByCategory;
-import com.click.accountHistory.domain.repository.AccountHistoryRepository;
 import com.click.accountHistory.domain.repository.AccountMonthBudgetRepository;
 import com.click.accountHistory.domain.repository.AmountByCategoryRepository;
 import com.click.accountHistory.exception.AccountHistoryErrorCode;

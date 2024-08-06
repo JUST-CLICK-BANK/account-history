@@ -9,7 +9,7 @@ public record WithdrawRequest(
     String bhName,
     Long bhAmount,
     String myAccount,
-    String yourAccount, // 입금에서 내 통장에 표시되는 내용은 받는 분 표시라서 이게 필요한지 모르겠음
+    // String yourAccount, // 입금에서 내 통장에 표시되는 내용은 받는 분 표시라서 이게 필요한지 모르겠음
     String bhStatus,
     Long bhBalance,
     Integer bhOutType,
@@ -23,7 +23,7 @@ public record WithdrawRequest(
             .bhName(bhName)
             .bhAmount(bhAmount)
             .myAccount(myAccount)
-            .yourAccount(yourAccount)
+            // .yourAccount(yourAccount)
             .bhStatus(bhStatus)
             .bhBalance(bhBalance)
             .bhOutType(TransactionType.fromValue(bhOutType))

@@ -43,8 +43,8 @@ public class AccountHistory {
     @Column(name = "MY_ACCOUNT")
     private String myAccount;
 
-    @Column(name = "YOUR_ACCOUNT")
-    private String yourAccount;
+    // @Column(name = "YOUR_ACCOUNT")
+    // private String yourAccount;
 
     @Column(name = "BH_STATUS")
     private String bhStatus;
