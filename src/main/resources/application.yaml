@@ -9,6 +9,10 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: AccountHistory
 
 server:
   port: 8080
