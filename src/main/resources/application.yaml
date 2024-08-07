@@ -11,8 +11,7 @@ spring:
     show-sql: true
   data:
     mongodb:
-      uri: mongodb://localhost:27017
-      database: AccountHistory
+      uri: mongodb://localhost:27017/AccountHistory
 
 server:
   port: 8080
