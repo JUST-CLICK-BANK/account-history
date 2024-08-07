@@ -7,8 +7,12 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: AccountHistory
 
 server:
   port: 8080
