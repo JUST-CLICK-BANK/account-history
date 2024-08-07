@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "data_20240806")
+@Document(collection = "PastRecord")
 public class AccountHistoryDocument {
 
     @Id
