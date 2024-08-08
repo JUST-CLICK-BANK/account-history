@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.ListCrudRepository;
 
-public interface MongoHistoryRepository extends MongoRepository<AccountHistoryDocument, String> {
+public interface MongoHistoryRepository extends MongoRepository<AccountHistoryDocument, Long> {
 
-    Page<AccountHistoryDocument> findByMyAccountOrderByIdDesc(String account, Pageable pageable);
+    Page<AccountHistoryDocument> findByMyAccountOrderByHistoryIdDesc(String account, Pageable pageable);
 
     // AccountHistoryDocument findByIdAndMyAccount(Long id, String account);
 

@@ -3,26 +3,27 @@ package com.click.accountHistory.domain.dto.response;
 import com.click.accountHistory.domain.entity.AccountHistory;
 import com.click.accountHistory.domain.entity.Category;
 import com.click.accountHistory.domain.mongo.AccountHistoryDocument;
+import com.click.accountHistory.domain.mongo.CategoryDocument;
 import java.time.LocalDateTime;
 
 public record AccountHistoryMongoResponse(
-    String id,
+    Long id,
     LocalDateTime bhAt,
     String bhName,
     Long bhAmount,
     String bhStatus,
     Long bhBalance,
-    String categoryName
+    CategoryDocument categoryId
 ) {
     public static AccountHistoryMongoResponse from(AccountHistoryDocument history) {
         return new AccountHistoryMongoResponse(
-            history.getId(),
+            history.getHistoryId(),
             history.getBhAt(),
             history.getBhName(),
             history.getBhAmount(),
             history.getBhStatus(),
             history.getBhBalance(),
-            history.getCategoryName()
+            history.getCategoryId()
         );
     }
 }

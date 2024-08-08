@@ -13,18 +13,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 @Document(collection = "PastRecord")
-public class AccountHistoryDocument {
+public class CategoryDocument {
 
     @Id
-    private Long historyId;
-    private LocalDateTime bhAt;
-    private String bhName;
-    private Long bhAmount;
-    private String myAccount;
-    private String bhStatus;
-    private Long bhBalance;
-    private String bhOutType;
-    private Long cardId;
-    private String bhMemo;
-    private CategoryDocument categoryId;
+    private Integer categoryId;
+    private String categoryName;
+
 }
