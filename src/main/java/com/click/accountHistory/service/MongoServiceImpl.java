@@ -23,12 +23,12 @@ public class MongoServiceImpl implements MongoService{
     @Override
     public List<AccountHistoryMongoResponse> getAllPastHistory(String account, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<AccountHistoryDocument> byMyAccount = mongoHistoryRepository.findByMyAccountOrderByIdDesc(account, pageRequest);
+        Page<AccountHistoryDocument> byMyAccount = mongoHistoryRepository.findByMyAccountOrderByHistoryIdDesc(account, pageRequest);
         return byMyAccount.stream().map(AccountHistoryMongoResponse::from).collect(Collectors.toList());
     }
 
     @Override
-    public AccountHistoryMongoDetailResponse getPastDetailHistory(String id) {
+    public AccountHistoryMongoDetailResponse getPastDetailHistory(Long id) {
         Optional<AccountHistoryDocument> byId = mongoHistoryRepository.findById(id);
         AccountHistoryDocument accountHistoryDocument =byId.orElseThrow(
             () -> new AccountHistoryException(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
