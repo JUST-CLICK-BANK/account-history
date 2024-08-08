@@ -9,5 +9,5 @@ public interface MongoService {
 
     List<AccountHistoryMongoResponse> getAllPastHistory(String account, int page, int size);
 
-    AccountHistoryMongoDetailResponse getPastDetailHistory(String id);
+    AccountHistoryMongoDetailResponse getPastDetailHistory(Long id);
 }

@@ -30,7 +30,7 @@ public class AccountHistoryMongoController {
 
     @GetMapping("/past/{id}")
     public AccountHistoryMongoDetailResponse getPastDetailHistory(
-        @PathVariable String id
+        @PathVariable Long id
         // @RequestParam("account") String account
     ){
         return mongoService.getPastDetailHistory(id);
