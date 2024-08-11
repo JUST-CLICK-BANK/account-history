@@ -3,7 +3,7 @@ package com.click.accountHistory.domain.dto.response;
 import com.click.accountHistory.domain.mongo.AccountHistoryDocument;
 
 public record AccountHistoryMongoDetailResponse(
-    Long id,
+    Long historyId,
     String bhOutType,
     Long cardId,
     String bhMemo
