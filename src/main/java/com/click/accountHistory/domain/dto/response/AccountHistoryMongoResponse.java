@@ -7,7 +7,7 @@ import com.click.accountHistory.domain.mongo.CategoryDocument;
 import java.time.LocalDateTime;
 
 public record AccountHistoryMongoResponse(
-    Long id,
+    Long historyId,
     LocalDateTime bhAt,
     String bhName,
     Long bhAmount,

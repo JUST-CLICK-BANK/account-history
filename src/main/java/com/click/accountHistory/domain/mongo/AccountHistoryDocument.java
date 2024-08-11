@@ -1,12 +1,15 @@
 package com.click.accountHistory.domain.mongo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @AllArgsConstructor
@@ -16,6 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AccountHistoryDocument {
 
     @Id
+    @Field("_id")
     private Long historyId;
     private LocalDateTime bhAt;
     private String bhName;
@@ -25,6 +29,9 @@ public class AccountHistoryDocument {
     private Long bhBalance;
     private String bhOutType;
     private Long cardId;
+
+    @Setter
     private String bhMemo;
+    @Setter
     private CategoryDocument categoryId;
 }
