@@ -8,6 +8,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,4 +38,17 @@ public class AccountHistoryMongoController {
         return mongoService.getPastDetailHistory(id);
     }
 
+    @PutMapping("/past/{id}/category/{categoryId}")
+    public void updatePastCategory(
+        @PathVariable("id") Long id,
+        @PathVariable("categoryId") Integer categoryId) {
+        mongoService.changeCategory(id, categoryId);
+    }
+
+    @PutMapping("/past/{id}/memo")
+    public void updatePastMemo(
+        @PathVariable("id") Long id,
+        @RequestBody(required = false) String memo) {
+        mongoService.updateHistoryMemo(id, memo);
+    }
 }
