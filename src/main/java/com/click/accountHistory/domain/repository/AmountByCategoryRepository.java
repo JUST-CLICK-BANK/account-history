@@ -14,6 +14,7 @@ public interface AmountByCategoryRepository extends JpaRepository<AmountByCatego
 
     @Query("SELECT SUM(a.abcAmount) "
         + "FROM AmountByCategory a "
-        + "WHERE a.abcAccount = :abcAccount")
+        + "WHERE a.abcAccount = :abcAccount "
+        + "AND a.abcDisable = true")
     Long sumAmountsByAccount(String abcAccount);
 }

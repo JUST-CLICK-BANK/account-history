@@ -32,4 +32,7 @@ public class AmountByCategory {
 
     @Column(name = "ABC_AMOUNT") @Setter
     private Long abcAmount;
+
+    @Column(name = "ABC_DISABLE")
+    private Boolean abcDisable = true;
 }
