@@ -16,7 +16,7 @@ public class DisableUpdateScheduled {
 
     private final AmountByCategoryRepository amountByCategoryRepository;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void disableUpdate() {
 
         List<AmountByCategory> byAbcDisableTrue = amountByCategoryRepository.findByAbcDisableTrue();
