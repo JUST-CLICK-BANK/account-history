@@ -30,9 +30,11 @@ public class AccountHistoryStatisticsServiceImpl implements AccountHistoryStatis
         Map<String, Long> sumAmountByCategory = new HashMap<>();
 
         for (AmountByCategory result : byAbcAccount) {
-            String categoryName = result.getAbcCategory();
-            Long sumAmount = result.getAbcAmount();
-            sumAmountByCategory.put(categoryName, sumAmount);
+            if (result.getAbcDisable()) {
+                String categoryName = result.getAbcCategory();
+                Long sumAmount = result.getAbcAmount();
+                sumAmountByCategory.put(categoryName, sumAmount);
+            }
         }
 
         return sumAmountByCategory;
