@@ -33,6 +33,6 @@ public class AmountByCategory {
     @Column(name = "ABC_AMOUNT") @Setter
     private Long abcAmount;
 
-    @Column(name = "ABC_DISABLE")
+    @Column(name = "ABC_DISABLE") @Setter
     private Boolean abcDisable = true;
 }
