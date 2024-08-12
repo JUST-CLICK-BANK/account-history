@@ -19,4 +19,6 @@ public interface AmountByCategoryRepository extends JpaRepository<AmountByCatego
     Long sumAmountsByAccount(String abcAccount);
 
     List<AmountByCategory> findByAbcDisableTrue();
+
+    AmountByCategory findByAbcAccountAndAbcCategoryAndAbcDisableTrue(String myAccount, String categoryName);
 }
