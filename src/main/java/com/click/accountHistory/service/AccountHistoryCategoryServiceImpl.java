@@ -38,10 +38,12 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
         accountHistory.setCategoryId(category);
 
         // 카테고리 수정 시, 지출 데이터 수정
-        AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
-            accountHistory.getMyAccount(), before.getCategoryName());
+        if(before.getCategoryId() != 9) {
+            AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
+                accountHistory.getMyAccount(), before.getCategoryName());
 
-        byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
+            byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
+        }
 
         AmountByCategory amountByCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
             accountHistory.getMyAccount(), category.getCategoryName());
