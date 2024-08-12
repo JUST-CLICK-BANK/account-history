@@ -1,5 +1,9 @@
 package com.click.accountHistory.service;
 
+import static org.springframework.data.mongodb.core.aggregation.AggregationUpdate.update;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+
 import com.click.accountHistory.domain.dto.response.AccountHistoryMongoDetailResponse;
 import com.click.accountHistory.domain.dto.response.AccountHistoryMongoResponse;
 import com.click.accountHistory.domain.entity.Category;
@@ -16,6 +20,9 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +31,7 @@ public class MongoServiceImpl implements MongoService{
 
     private final MongoHistoryRepository mongoHistoryRepository;
     private final CategoryRepository categoryRepository;
+    private final MongoTemplate mongoTemplate;
 
     @Override
     public List<AccountHistoryMongoResponse> getAllPastHistory(String account, int page, int size) {
@@ -46,35 +54,26 @@ public class MongoServiceImpl implements MongoService{
     @Transactional
     @Override
     public void changeCategory(Long id, Integer categoryId) {
-        Optional<AccountHistoryDocument> byId = mongoHistoryRepository.findById(id);
 
-        if(byId.isPresent()) {
-            AccountHistoryDocument accountHistoryDocument = byId.get();
+        Optional<Category> byCategoryId = categoryRepository.findById(categoryId);
+        Category category = byCategoryId.orElseThrow(
+            () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
 
-            Optional<Category> byCategoryId = categoryRepository.findById(categoryId);
-            Category category = byCategoryId.orElseThrow(
-                () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
+        CategoryDocument categoryDocument = new CategoryDocument(category.getCategoryId(),
+            category.getCategoryName());
 
-            CategoryDocument categoryDocument = new CategoryDocument(category.getCategoryId(),
-                category.getCategoryName());
-            System.out.println(categoryDocument.getCategoryId() + " " + categoryDocument.getCategoryName());
-
-            accountHistoryDocument.setCategoryId(categoryDocument);
-            mongoHistoryRepository.save(accountHistoryDocument);
-        } else {
-            throw new AccountHistoryException(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY);
-        }
+        Query query = query(where("_id").is(id));
+        Update update = new Update().set("categoryId", category);
+        mongoTemplate.updateFirst(query, update, AccountHistoryDocument.class);
 
     }
 
     @Transactional
     @Override
     public void updateHistoryMemo(Long id, String memo) {
-        Optional<AccountHistoryDocument> byId = mongoHistoryRepository.findById(id);
-        AccountHistoryDocument accountHistoryDocument = byId.orElseThrow(
-            () -> new AccountHistoryException(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
+        Query query = query(where("_id").is(id));
+        Update update = new Update().set("bhMemo", memo);
+        mongoTemplate.updateFirst(query, update, AccountHistoryDocument.class);
 
-        accountHistoryDocument.setBhMemo(memo);
-        mongoHistoryRepository.save(accountHistoryDocument);
     }
 }
