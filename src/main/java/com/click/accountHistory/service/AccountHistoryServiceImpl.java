@@ -81,10 +81,15 @@ public class AccountHistoryServiceImpl implements AccountHistoryService, AmountB
         CategoryRequest categoryRequest = new CategoryRequest(withdrawRequest.myAccount(),
             category.getCategoryName(), withdrawRequest.bhAmount());
 
-        if (byFind != null) {
+        if(byFind != null && byFind.getAbcDisable()){
             byFind.setAbcAmount(byFind.getAbcAmount() + withdrawRequest.bhAmount());
             return;
         }
+
+        // if (byFind != null) {
+        //     byFind.setAbcAmount(byFind.getAbcAmount() + withdrawRequest.bhAmount());
+        //     return;
+        // }
 
         amountByCategoryRepository.save(categoryRequest.toEntity());
     }
