@@ -75,6 +75,11 @@ public class AccountHistoryServiceImpl implements AccountHistoryService, AmountB
     public void CalculatedCategoryAmount(WithdrawRequest withdrawRequest) {
         Category category = categoryRepository.findById(withdrawRequest.categoryId())
             .orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
+
+        if(category.getCategoryId() == 9) {
+            return;
+        }
+
         AmountByCategory byFind = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
             withdrawRequest.myAccount(), category.getCategoryName());
 
@@ -85,11 +90,6 @@ public class AccountHistoryServiceImpl implements AccountHistoryService, AmountB
             byFind.setAbcAmount(byFind.getAbcAmount() + withdrawRequest.bhAmount());
             return;
         }
-
-        // if (byFind != null) {
-        //     byFind.setAbcAmount(byFind.getAbcAmount() + withdrawRequest.bhAmount());
-        //     return;
-        // }
 
         amountByCategoryRepository.save(categoryRequest.toEntity());
     }
