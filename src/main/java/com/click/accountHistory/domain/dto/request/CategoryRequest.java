@@ -12,6 +12,7 @@ public record CategoryRequest(
             .abcAccount(abcAccount)
             .abcCategory(abcCategory)
             .abcAmount(abcAmount)
+            .abcDisable(true)
             .build();
     }
 }
