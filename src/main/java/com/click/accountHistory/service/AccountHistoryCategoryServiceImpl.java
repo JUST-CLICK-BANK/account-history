@@ -38,22 +38,25 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
         accountHistory.setCategoryId(category);
 
         // 카테고리 수정 시, 지출 데이터 수정
-        if(before.getCategoryId() != 9) {
+        if(accountHistory.getBhStatus().equals("출금")){
             AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
                 accountHistory.getMyAccount(), before.getCategoryName());
 
             byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
+
+            AmountByCategory amountByCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
+                accountHistory.getMyAccount(), category.getCategoryName());
+
+            if (amountByCategory == null) {
+                AmountByCategory newData = new AmountByCategory(null, accountHistory.getMyAccount(), category.getCategoryName(), amount, true);
+                amountByCategoryRepository.save(newData);
+            } else {
+                amountByCategory.setAbcAmount(amountByCategory.getAbcAmount() + amount);
+            }
         }
 
-        AmountByCategory amountByCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
-            accountHistory.getMyAccount(), category.getCategoryName());
-
-        if (amountByCategory == null && category.getCategoryId() != 9) {
-            AmountByCategory newData = new AmountByCategory(null, accountHistory.getMyAccount(), category.getCategoryName(), amount, true);
-            amountByCategoryRepository.save(newData);
-        } else if (category.getCategoryId() != 9){
-            amountByCategory.setAbcAmount(amountByCategory.getAbcAmount() + amount);
-        }
+        // if(before.getCategoryId() != 9) {
+        // }
 
     }
 }
