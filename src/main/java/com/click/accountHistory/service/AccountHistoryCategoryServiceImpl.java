@@ -28,9 +28,6 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
         AccountHistory accountHistory = byId.orElseThrow(
             () -> new AccountHistoryException(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
 
-        Category before = accountHistory.getCategoryId();
-        Long amount = accountHistory.getBhAmount();
-
         Optional<Category> byCategoryId = categoryRepository.findById(categoryId);
         Category category = byCategoryId.orElseThrow(
             () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
@@ -39,6 +36,9 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
 
         // 카테고리 수정 시, 지출 데이터 수정
         if(accountHistory.getBhStatus().equals("출금")){
+            Category before = accountHistory.getCategoryId();
+            Long amount = accountHistory.getBhAmount();
+
             AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
                 accountHistory.getMyAccount(), before.getCategoryName());
 
