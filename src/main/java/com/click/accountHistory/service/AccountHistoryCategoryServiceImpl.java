@@ -36,7 +36,7 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
 
         // 카테고리 수정 시, 지출 데이터 수정
         if(accountHistory.getBhStatus().equals("출금")){
-            Category before = accountHistory.getCategoryId();;
+            Category before = accountHistory.getCategoryId();
             Long amount = accountHistory.getBhAmount();
 
             if (accountHistory.getHistoryId() != null) {
