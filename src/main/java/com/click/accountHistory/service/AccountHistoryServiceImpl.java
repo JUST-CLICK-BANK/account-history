@@ -63,17 +63,18 @@ public class AccountHistoryServiceImpl implements AccountHistoryService, AmountB
     @Override
     @Transactional
     public void addWithdraw(WithdrawRequest withdrawRequest) {
-        Optional<Category> byId = categoryRepository.findById(withdrawRequest.categoryId());
-        Category category = byId.orElseThrow(
-            () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
 
-        if(category.getCategoryId() == 9) {
+        if (withdrawRequest.categoryId() != 9) {
+            Optional<Category> byId = categoryRepository.findById(withdrawRequest.categoryId());
+            Category category = byId.orElseThrow(
+                () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
+
+            accountHistoryRepository.save(withdrawRequest.toEntity(category));
+        } else {
             Optional<Category> byId1 = categoryRepository.findById(10);
-            Category category1 = byId.orElseThrow(
+            Category category1 = byId1.orElseThrow(
                 () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
             accountHistoryRepository.save(withdrawRequest.toEntity(category1));
-        } else {
-            accountHistoryRepository.save(withdrawRequest.toEntity(category));
         }
 
         CalculatedCategoryAmount(withdrawRequest);
@@ -83,12 +84,12 @@ public class AccountHistoryServiceImpl implements AccountHistoryService, AmountB
     public void CalculatedCategoryAmount(WithdrawRequest withdrawRequest) {
         Category category = null;
 
-        if(withdrawRequest.categoryId() == 9) {
-            category = categoryRepository.findById(10)
+        if(withdrawRequest.categoryId() != 9) {
+            category = categoryRepository.findById(withdrawRequest.categoryId())
                 .orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
         } else {
-            category = categoryRepository.findById(withdrawRequest.categoryId())
-            .orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
+            category = categoryRepository.findById(10)
+                .orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
         }
 
         AmountByCategory byFind = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
