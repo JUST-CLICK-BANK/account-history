@@ -39,10 +39,12 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
             Category before = accountHistory.getCategoryId();
             Long amount = accountHistory.getBhAmount();
 
-            AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
-                accountHistory.getMyAccount(), before.getCategoryName());
+            if (accountHistory.getHistoryId() != null) {
+                AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
+                    accountHistory.getMyAccount(), before.getCategoryName());
 
-            byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
+                byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
+            }
 
             AmountByCategory amountByCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
                 accountHistory.getMyAccount(), category.getCategoryName());
@@ -54,9 +56,6 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
                 amountByCategory.setAbcAmount(amountByCategory.getAbcAmount() + amount);
             }
         }
-
-        // if(before.getCategoryId() != 9) {
-        // }
 
     }
 }
