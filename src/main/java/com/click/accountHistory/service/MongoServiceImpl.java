@@ -6,9 +6,11 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 import com.click.accountHistory.domain.dto.response.AccountHistoryMongoDetailResponse;
 import com.click.accountHistory.domain.dto.response.AccountHistoryMongoResponse;
+import com.click.accountHistory.domain.entity.AmountByCategory;
 import com.click.accountHistory.domain.entity.Category;
 import com.click.accountHistory.domain.mongo.AccountHistoryDocument;
 import com.click.accountHistory.domain.mongo.CategoryDocument;
+import com.click.accountHistory.domain.repository.AmountByCategoryRepository;
 import com.click.accountHistory.domain.repository.CategoryRepository;
 import com.click.accountHistory.domain.repository.MongoHistoryRepository;
 import com.click.accountHistory.exception.AccountHistoryErrorCode;
@@ -32,6 +34,8 @@ public class MongoServiceImpl implements MongoService{
     private final MongoHistoryRepository mongoHistoryRepository;
     private final CategoryRepository categoryRepository;
     private final MongoTemplate mongoTemplate;
+    private final AccountHistoryCategoryServiceImpl accountHistoryCategoryServiceImpl;
+    private final AmountByCategoryRepository amountByCategoryRepository;
 
     @Override
     public List<AccountHistoryMongoResponse> getAllPastHistory(String account, int page, int size) {
@@ -55,12 +59,39 @@ public class MongoServiceImpl implements MongoService{
     @Override
     public void changeCategory(Long id, Integer categoryId) {
 
+        AccountHistoryDocument accountHistoryDocument = mongoHistoryRepository.findById(id)
+            .orElseThrow(
+                () -> new AccountHistoryException(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
+
+        String account = accountHistoryDocument.getMyAccount();
+        Long amount = accountHistoryDocument.getBhAmount();
+        Category before = categoryRepository.findById(accountHistoryDocument.getCategoryId().getCategoryId()).orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
+
         Optional<Category> byCategoryId = categoryRepository.findById(categoryId);
         Category category = byCategoryId.orElseThrow(
             () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
 
-        CategoryDocument categoryDocument = new CategoryDocument(category.getCategoryId(),
-            category.getCategoryName());
+        // CategoryDocument categoryDocument = new CategoryDocument(category.getCategoryId(),
+        //     category.getCategoryName());
+
+        if(accountHistoryDocument.getBhStatus().equals("출금")){
+            AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
+                account, before.getCategoryName());
+
+            if (byCategory != null){
+                byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
+            }
+
+            AmountByCategory amountByCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
+                account, category.getCategoryName());
+
+            if (amountByCategory == null) {
+                AmountByCategory newData = new AmountByCategory(null, account, category.getCategoryName(), amount, true);
+                amountByCategoryRepository.save(newData);
+            } else {
+                amountByCategory.setAbcAmount(amountByCategory.getAbcAmount() + amount);
+            }
+        }
 
         Query query = query(where("_id").is(id));
         Update update = new Update().set("categoryId", category);

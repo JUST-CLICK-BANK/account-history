@@ -32,7 +32,6 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
         Category category = byCategoryId.orElseThrow(
             () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
 
-        accountHistory.setCategoryId(category);
 
         // 카테고리 수정 시, 지출 데이터 수정
         if(accountHistory.getBhStatus().equals("출금")){
@@ -57,6 +56,8 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
                 amountByCategory.setAbcAmount(amountByCategory.getAbcAmount() + amount);
             }
         }
+
+        accountHistory.setCategoryId(category);
 
     }
 }
