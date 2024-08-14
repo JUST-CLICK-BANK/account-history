@@ -39,12 +39,13 @@ public class AccountHistoryCategoryServiceImpl implements AccountHistoryCategory
             Category before = accountHistory.getCategoryId();
             Long amount = accountHistory.getBhAmount();
 
-            if (accountHistory.getHistoryId() != null) {
-                AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
-                    accountHistory.getMyAccount(), before.getCategoryName());
-
+            // if (accountHistory.getHistoryId() != null) {
+            AmountByCategory byCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategoryAndAbcDisableTrue(
+                accountHistory.getMyAccount(), before.getCategoryName());
+            if (byCategory != null){
                 byCategory.setAbcAmount(byCategory.getAbcAmount() - amount);
             }
+            // }
 
             AmountByCategory amountByCategory = amountByCategoryRepository.findByAbcAccountAndAbcCategory(
                 accountHistory.getMyAccount(), category.getCategoryName());

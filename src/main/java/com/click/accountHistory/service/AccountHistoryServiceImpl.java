@@ -82,12 +82,10 @@ public class AccountHistoryServiceImpl implements AccountHistoryService, AmountB
 
     @Override
     public void CalculatedCategoryAmount(WithdrawRequest withdrawRequest) {
-        Category category = null;
+        Category category = categoryRepository.findById(withdrawRequest.categoryId()).orElseThrow(
+            () -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
 
-        if(withdrawRequest.categoryId() != 9) {
-            category = categoryRepository.findById(withdrawRequest.categoryId())
-                .orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
-        } else {
+        if(withdrawRequest.categoryId() == 9) {
             category = categoryRepository.findById(10)
                 .orElseThrow(() -> new AccountHistoryException(AccountHistoryErrorCode.NO_CATEGORY));
         }
