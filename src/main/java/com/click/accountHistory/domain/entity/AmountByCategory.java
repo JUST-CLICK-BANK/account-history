@@ -20,6 +20,7 @@ import lombok.Setter;
 @Table(name = "AMOUNT_BY_CATEGORY")
 public class AmountByCategory {
 
+    // 이하 필드명에 있는 ABC 는 Amount_By_Category(카테고리별 지출) 의 약자입니다.
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ABC_ID")
     private Long abcId;
