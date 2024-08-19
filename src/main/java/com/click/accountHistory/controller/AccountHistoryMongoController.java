@@ -32,7 +32,7 @@ public class AccountHistoryMongoController {
 
     @GetMapping("/past/{id}")
     public AccountHistoryMongoDetailResponse getPastDetailHistory(
-        @PathVariable Long id
+        @PathVariable String id
         // @RequestParam("account") String account
     ){
         return mongoService.getPastDetailHistory(id);
@@ -40,14 +40,14 @@ public class AccountHistoryMongoController {
 
     @PutMapping("/past/{id}/category/{categoryId}")
     public void updatePastCategory(
-        @PathVariable("id") Long id,
+        @PathVariable("id") String id,
         @PathVariable("categoryId") Integer categoryId) {
         mongoService.changeCategory(id, categoryId);
     }
 
     @PutMapping("/past/{id}/memo")
     public void updatePastMemo(
-        @PathVariable("id") Long id,
+        @PathVariable("id") String id,
         @RequestBody(required = false) String memo) {
         mongoService.updateHistoryMemo(id, memo);
     }
