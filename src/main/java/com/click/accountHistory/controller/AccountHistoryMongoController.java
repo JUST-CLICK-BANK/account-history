@@ -1,9 +1,7 @@
 package com.click.accountHistory.controller;
 
-import com.click.accountHistory.domain.dto.request.MemoRequest;
 import com.click.accountHistory.domain.dto.response.AccountHistoryMongoDetailResponse;
 import com.click.accountHistory.domain.dto.response.AccountHistoryMongoResponse;
-import com.click.accountHistory.domain.mongo.AccountHistoryDocument;
 import com.click.accountHistory.service.MongoService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +47,7 @@ public class AccountHistoryMongoController {
     @PutMapping("/past/{id}/memo")
     public void updatePastMemo(
         @PathVariable("id") String id,
-        @RequestBody(required = false) MemoRequest memo) {
-        mongoService.updateHistoryMemo(id, memo.memo());
+        @RequestBody(required = false) String memo) {
+        mongoService.updateHistoryMemo(id, memo);
     }
 }
