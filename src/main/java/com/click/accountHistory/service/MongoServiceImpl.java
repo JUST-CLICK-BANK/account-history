@@ -105,7 +105,7 @@ public class MongoServiceImpl implements MongoService{
         Query query = new Query(where("_id").is(id));
         Update update = new Update();
 
-        if (memo.isEmpty()) {
+        if (memo == null || memo.isEmpty()) {
             // memo가 빈 문자열이면 필드를 삭제
             update.unset("bhMemo");
         } else {
