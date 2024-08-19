@@ -102,9 +102,13 @@ public class MongoServiceImpl implements MongoService{
     @Transactional
     @Override
     public void updateHistoryMemo(String id, String memo) {
-        Query query = query(where("_id").is(id));
-        Update update = new Update().set("bhMemo", memo);
-        mongoTemplate.updateFirst(query, update, AccountHistoryDocument.class);
+        String updateMemo = memo;
+        if(memo.isEmpty()){
+            updateMemo = null;
+        }
 
+        Query query = query(where("_id").is(id));
+        Update update = new Update().set("bhMemo", updateMemo);
+        mongoTemplate.updateFirst(query, update, AccountHistoryDocument.class);
     }
 }
