@@ -102,13 +102,17 @@ public class MongoServiceImpl implements MongoService{
     @Transactional
     @Override
     public void updateHistoryMemo(String id, String memo) {
-        String updateMemo = memo;
-        if(memo.isEmpty()){
-            updateMemo = null;
+        Query query = new Query(where("_id").is(id));
+        Update update = new Update();
+
+        if (memo.isEmpty()) {
+            // memo가 빈 문자열이면 필드를 삭제
+            update.unset("bhMemo");
+        } else {
+            // memo가 빈 문자열이 아니면 필드에 값을 설정
+            update.set("bhMemo", memo);
         }
 
-        Query query = query(where("_id").is(id));
-        Update update = new Update().set("bhMemo", updateMemo);
         mongoTemplate.updateFirst(query, update, AccountHistoryDocument.class);
     }
 }
