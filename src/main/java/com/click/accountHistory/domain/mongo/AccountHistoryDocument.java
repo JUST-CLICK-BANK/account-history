@@ -20,7 +20,7 @@ public class AccountHistoryDocument {
 
     @Id
     @Field("_id")
-    private Long historyId;
+    private String historyId;
     private LocalDateTime bhAt;
     private String bhName;
     private Long bhAmount;

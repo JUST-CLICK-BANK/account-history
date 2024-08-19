@@ -45,7 +45,7 @@ public class MongoServiceImpl implements MongoService{
     }
 
     @Override
-    public AccountHistoryMongoDetailResponse getPastDetailHistory(Long id) {
+    public AccountHistoryMongoDetailResponse getPastDetailHistory(String id) {
         Optional<AccountHistoryDocument> byId = mongoHistoryRepository.findById(id);
         AccountHistoryDocument accountHistoryDocument =byId.orElseThrow(
             () -> new AccountHistoryException(AccountHistoryErrorCode.NO_ACCOUNT_HISTORY));
@@ -57,7 +57,7 @@ public class MongoServiceImpl implements MongoService{
 
     @Transactional
     @Override
-    public void changeCategory(Long id, Integer categoryId) {
+    public void changeCategory(String id, Integer categoryId) {
 
         AccountHistoryDocument accountHistoryDocument = mongoHistoryRepository.findById(id)
             .orElseThrow(
@@ -101,7 +101,7 @@ public class MongoServiceImpl implements MongoService{
 
     @Transactional
     @Override
-    public void updateHistoryMemo(Long id, String memo) {
+    public void updateHistoryMemo(String id, String memo) {
         Query query = query(where("_id").is(id));
         Update update = new Update().set("bhMemo", memo);
         mongoTemplate.updateFirst(query, update, AccountHistoryDocument.class);

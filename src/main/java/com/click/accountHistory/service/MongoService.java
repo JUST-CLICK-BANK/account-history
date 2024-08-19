@@ -9,9 +9,9 @@ public interface MongoService {
 
     List<AccountHistoryMongoResponse> getAllPastHistory(String account, int page, int size);
 
-    AccountHistoryMongoDetailResponse getPastDetailHistory(Long id);
+    AccountHistoryMongoDetailResponse getPastDetailHistory(String id);
 
-    void changeCategory(Long id, Integer categoryId);
+    void changeCategory(String id, Integer categoryId);
 
-    void updateHistoryMemo(Long id, String memo);
+    void updateHistoryMemo(String id, String memo);
 }

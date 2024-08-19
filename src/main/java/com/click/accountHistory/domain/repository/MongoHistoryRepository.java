@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.ListCrudRepository;
 
-public interface MongoHistoryRepository extends MongoRepository<AccountHistoryDocument, Long> {
+public interface MongoHistoryRepository extends MongoRepository<AccountHistoryDocument, String> {
 
     Page<AccountHistoryDocument> findByMyAccountOrderByHistoryIdDesc(String account, Pageable pageable);
 
