@@ -13,6 +13,8 @@ public interface MongoHistoryRepository extends MongoRepository<AccountHistoryDo
 
     Page<AccountHistoryDocument> findByMyAccountOrderByHistoryIdDesc(String account, Pageable pageable);
 
+    List<AccountHistoryDocument> findByMyAccountOrderByBhAtDesc(String account);
+
     // AccountHistoryDocument findByIdAndMyAccount(Long id, String account);
 
 
