@@ -5,15 +5,18 @@ import com.click.accountHistory.domain.entity.AccountHistory;
 import com.click.accountHistory.domain.mongo.AccountHistoryDocument;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.ListCrudRepository;
 
 public interface MongoHistoryRepository extends MongoRepository<AccountHistoryDocument, String> {
 
-    Page<AccountHistoryDocument> findByMyAccountOrderByHistoryIdDesc(String account, Pageable pageable);
+    Page<AccountHistoryDocument> findByMyAccountOrderByBhAtDesc(String account, PageRequest pageRequest);
 
-    List<AccountHistoryDocument> findByMyAccountOrderByBhAtDesc(String account);
+    // Page<AccountHistoryDocument> findByMyAccountOrderByHistoryIdDesc(String account, Pageable pageable);
+
+    // List<AccountHistoryDocument> findByMyAccountOrderByBhAtDesc(String account);
 
     // AccountHistoryDocument findByIdAndMyAccount(Long id, String account);
 

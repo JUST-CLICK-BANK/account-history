@@ -39,20 +39,9 @@ public class MongoServiceImpl implements MongoService{
 
     @Override
     public List<AccountHistoryMongoResponse> getAllPastHistory(String account, int page, int size) {
-        // PageRequest pageRequest = PageRequest.of(page, size);
-        // Page<AccountHistoryDocument> byMyAccount = mongoHistoryRepository.findByMyAccountOrderByHistoryIdDesc(account, pageRequest);
-        // return byMyAccount.stream().map(AccountHistoryMongoResponse::from).collect(Collectors.toList());
-        List<AccountHistoryDocument> allHistories = mongoHistoryRepository.findByMyAccountOrderByBhAtDesc(account);
-
-        // 가져온 데이터 중에서 필요한 부분만을 페이징 처리합니다.
-        int start = Math.min(page * size, allHistories.size());
-        int end = Math.min((page + 1) * size, allHistories.size());
-
-        // 해당 범위의 데이터를 반환합니다.
-        List<AccountHistoryDocument> pagedHistories = allHistories.subList(start, end);
-
-        return pagedHistories.stream().map(AccountHistoryMongoResponse::from).collect(Collectors.toList());
-
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<AccountHistoryDocument> byMyAccount = mongoHistoryRepository.findByMyAccountOrderByBhAtDesc(account, pageRequest);
+        return byMyAccount.stream().map(AccountHistoryMongoResponse::from).collect(Collectors.toList());
     }
 
     @Override
